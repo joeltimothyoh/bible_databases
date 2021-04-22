@@ -14,7 +14,12 @@ CONTENT=
 
 # Get books
 TRANSLATIONS=$( ls "$TXT_DIRECTORY" )
-BOOKS_PATHS_ALL=$( find "$TXT_DIRECTORY" -type f )
+BOOKS_PATHS_ALL=$(
+    for TRANSLATION in $TRANSLATIONS; do
+        ls "$TXT_DIRECTORY/$TRANSLATION" | sort -n | while read -r BOOK_FILE_NAME; do
+            echo "$TXT_DIRECTORY/$TRANSLATION/$BOOK_FILE_NAME"
+        done
+    done )
 BOOKS=$( ls "$TXT_DIRECTORY/YLT" | sort -n | sed 's@^[0-9]\+\s\+\([^-]\+\)\s\+.*@\1@' )
 
 # Generate index.md
