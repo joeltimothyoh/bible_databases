@@ -7,6 +7,7 @@ set -eu
 # Constants
 TXT_DIRECTORY=txt
 LINKS_DIRECTORY=links
+LINKS_FILE="$LINKS_DIRECTORY/links.txt"
 
 # Globals
 CONTENT=
@@ -32,14 +33,18 @@ MD_TABLE_CONTENT=$(
 cat - > "$FILE" <<EOF
 # Read the bible
 
+Select a book to read:
+
 $MD_TABLE_TITLE
 $MD_TABLE_ALIGNER
 $MD_TABLE_CONTENT
+
+Full list of links can be found [here]($LINKS_FILE).
+
 EOF
 echo "$FILE"
 
 # Generate links.txt
-FILE="$LINKS_DIRECTORY/links.txt"
 TXT_LINKS=$( echo "$BOOKS_PATHS_ALL" | sed 's@\(.*\)@https://leojonathanoh.github.io/bible_databases/\1@' | sed 's/ /%20/g' )
-echo "$TXT_LINKS" > "$FILE"
-echo "$FILE"
+echo "$TXT_LINKS" > "$LINKS_FILE"
+echo "$LINKS_FILE"
