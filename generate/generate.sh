@@ -6,6 +6,7 @@ set -eu
 
 # Constants
 TXT_DIRECTORY=txt
+LINKS_DIRECTORY=links
 
 # Globals
 CONTENT=
@@ -15,8 +16,8 @@ TRANSLATIONS=$( ls "$TXT_DIRECTORY" )
 BOOKS_PATHS_ALL=$( find "$TXT_DIRECTORY" -type f )
 BOOKS=$( ls "$TXT_DIRECTORY/YLT" | sort -n | sed 's@^[0-9]\+\s\+\([^-]\+\)\s\+.*@\1@' )
 
-# Generate the markdown sections
-MD_FILE=index.md
+# Generate index.md
+FILE=index.md
 MD_TABLE_TITLE="| BOOK $( for TRANSLATION in $TRANSLATIONS; do echo "| $TRANSLATION"; done | tr -d '\n' ) |"
 MD_TABLE_ALIGNER="|---$( printf "%$( echo "$TRANSLATIONS" | wc -l )s" | sed 's/ /\|---/g' )|"
 MD_TABLE_CONTENT=$(
@@ -28,13 +29,17 @@ MD_TABLE_CONTENT=$(
         echo "$_LINE"
     done
 )
-
-# Write the markdown content
-cat - > "$MD_FILE" <<EOF
+cat - > "$FILE" <<EOF
 # Read the bible
 
 $MD_TABLE_TITLE
 $MD_TABLE_ALIGNER
 $MD_TABLE_CONTENT
 EOF
-echo "$MD_FILE"
+echo "$FILE"
+
+# Generate links.txt
+FILE="$LINKS_DIRECTORY/links.txt"
+TXT_LINKS=$( echo "$BOOKS_PATHS_ALL" | sed 's@\(.*\)@https://leojonathanoh.github.io/bible_databases/\1@' | sed 's/ /%20/g' )
+echo "$TXT_LINKS" > "$FILE"
+echo "$FILE"
