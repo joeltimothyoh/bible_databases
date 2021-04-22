@@ -16,6 +16,7 @@ BOOKS_PATHS_ALL=$( find "$TXT_DIRECTORY" -type f )
 BOOKS=$( ls "$TXT_DIRECTORY/YLT" | sort -n | sed 's@^[0-9]\+\s\+\([^-]\+\)\s\+.*@\1@' )
 
 # Generate the markdown sections
+MD_FILE=index.md
 MD_TABLE_TITLE="| BOOK $( for TRANSLATION in $TRANSLATIONS; do echo "| $TRANSLATION"; done | tr -d '\n' ) |"
 MD_TABLE_ALIGNER="|---$( printf "%$( echo "$TRANSLATIONS" | wc -l )s" | sed 's/ /\|---/g' )|"
 MD_TABLE_CONTENT=$(
@@ -29,12 +30,11 @@ MD_TABLE_CONTENT=$(
 )
 
 # Write the markdown content
-cat - > index.md <<EOF
+cat - > "$MD_FILE" <<EOF
 # Read the bible
 
 $MD_TABLE_TITLE
 $MD_TABLE_ALIGNER
 $MD_TABLE_CONTENT
-
 EOF
-echo done
+echo "$MD_FILE"
