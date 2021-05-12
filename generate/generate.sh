@@ -7,20 +7,31 @@ set -eu
 # Constants
 TXT_DIRECTORY=txt
 LINKS_DIRECTORY=links
-LINKS_FILE="$LINKS_DIRECTORY/links.txt"
+LINKS_BOOKS_FILE="$LINKS_DIRECTORY/links-books.txt"
+LINKS_CHAPTERS_FILE="$LINKS_DIRECTORY/links-chapters.txt"
 
 # Globals
 CONTENT=
 
-# Get books
+# Get translations
 TRANSLATIONS=$( ls "$TXT_DIRECTORY" )
+
+# Get books
 BOOKS_PATHS_ALL=$(
     for TRANSLATION in $TRANSLATIONS; do
-        ls "$TXT_DIRECTORY/$TRANSLATION" | sort -n | while read -r BOOK_FILE_NAME; do
-            echo "$TXT_DIRECTORY/$TRANSLATION/$BOOK_FILE_NAME"
+        ls -p "$TXT_DIRECTORY/$TRANSLATION/books" | grep -v / | sort -n | while read -r NAME; do
+            echo "$TXT_DIRECTORY/$TRANSLATION/books/$NAME"
         done
     done )
 BOOKS=$( ls "$TXT_DIRECTORY/YLT" | sort -n | sed 's@^[0-9]\+\s\+\([^-]\+\)\s\+.*@\1@' )
+
+# Get chapters
+CHAPTERS_PATHS_ALL=$(
+    for TRANSLATION in $TRANSLATIONS; do
+        ls "$TXT_DIRECTORY/$TRANSLATION/chapters" | sort -n | while read -r NAME; do
+            echo "$TXT_DIRECTORY/$TRANSLATION/chapters/$NAME"
+        done
+    done )
 
 # Generate index.md
 FILE=index.md
@@ -44,12 +55,19 @@ $MD_TABLE_TITLE
 $MD_TABLE_ALIGNER
 $MD_TABLE_CONTENT
 
-Full list of links can be found [here]($LINKS_FILE).
+Full list of book links can be found [here]($LINKS_BOOKS_FILE).
+
+Full list of chapter links can be found [here]($LINKS_CHAPTERS_FILE).
 
 EOF
 echo "$FILE"
 
-# Generate links.txt
+# Generate links-books.txt
 TXT_LINKS=$( echo "$BOOKS_PATHS_ALL" | sed 's@\(.*\)@https://leojonathanoh.github.io/bible_databases/\1@' | sed 's/ /%20/g' )
-echo "$TXT_LINKS" > "$LINKS_FILE"
-echo "$LINKS_FILE"
+echo "$TXT_LINKS" > "$LINKS_BOOKS_FILE"
+echo "$LINKS_BOOKS_FILE"
+
+# # Generate links-chapters.txt
+TXT_LINKS=$( echo "$CHAPTERS_PATHS_ALL" | sed 's@\(.*\)@https://leojonathanoh.github.io/bible_databases/\1@' | sed 's/ /%20/g' )
+echo "$TXT_LINKS" > "$LINKS_CHAPTERS_FILE"
+echo "$LINKS_CHAPTERS_FILE"
