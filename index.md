@@ -8,5 +8,6 @@ Select a book to read:
 | chapters  | [read]() | [read]() | [read]() | [read]() | [read]()
 
 Full list of book links can be found [here](links/links-books.txt).
+
 Full list of chapter links can be found [here](links/links-chapters.txt).
 
