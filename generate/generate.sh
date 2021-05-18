@@ -28,7 +28,7 @@ BOOKS=$( ls "$TXT_DIRECTORY/YLT" | sort -n | sed 's@^[0-9]\+\s\+\([^-]\+\)\s\+.*
 # Get chapters
 CHAPTERS_PATHS_ALL=$(
     for TRANSLATION in $TRANSLATIONS; do
-        ls "$TXT_DIRECTORY/$TRANSLATION/chapters" | sort -n -k1 -k3 | while read -r NAME; do
+        ls "$TXT_DIRECTORY/$TRANSLATION/chapters" | sort -n -k1 -k3 -k4 | while read -r NAME; do
             echo "$TXT_DIRECTORY/$TRANSLATION/chapters/$NAME"
         done
     done )
