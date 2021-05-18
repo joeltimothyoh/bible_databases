@@ -9,7 +9,7 @@ TXT_DIRECTORY=txt
 TRANSLATIONS=$( ls "$TXT_DIRECTORY" )
 
 for TRANSLATION in $TRANSLATIONS; do
-    ls -p "$TXT_DIRECTORY/$t/books" | grep -v / | sort -n | while read -r BOOK; do
+    ls -p "$TXT_DIRECTORY/$TRANSLATION/books" | grep -v / | sort -n | while read -r BOOK; do
         echo "Generating chapters for $TXT_DIRECTORY/$TRANSLATION/books/$BOOK"
         # E.g. 1 Genesis
         BIBLE_BOOK_TITLE_WITH_INDEX=$( echo "$BOOK" | head -n1 | sed 's@^\([0-9]\+\s\+[^-]\+\)\s\+.*@\1@')
@@ -24,7 +24,7 @@ for TRANSLATION in $TRANSLATIONS; do
             # E.g. txt/YLT/chapters/1 Genesis 1.txt
             # E.g. txt/YLT/chapters/66 Revelation 22.txt
             echo "Creating chapter file: $BIBLE_BOOK_CHAPTER_DIR/$BIBLE_BOOK_TITLE $c.txt"
-            cat "$TXT_DIRECTORY/$t/books/$BOOK" | grep -E "^\[$c:" > "$BIBLE_BOOK_CHAPTER_DIR/$BIBLE_BOOK_TITLE $c.txt"
+            cat "$TXT_DIRECTORY/$TRANSLATION/books/$BOOK" | grep -E "^\[$c:" > "$BIBLE_BOOK_CHAPTER_DIR/$BIBLE_BOOK_TITLE $c.txt"
         done
     done
 done
