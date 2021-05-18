@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Generate index.md",
+            "label": "Generate files",
             "type": "shell",
             "command": "./generate/generate.sh"
         }
