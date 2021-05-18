@@ -28,8 +28,18 @@ BOOKS=$( ls "$TXT_DIRECTORY/YLT" | sort -n | sed 's@^[0-9]\+\s\+\([^-]\+\)\s\+.*
 # Get chapters
 CHAPTERS_PATHS_ALL=$(
     for TRANSLATION in $TRANSLATIONS; do
-        ls "$TXT_DIRECTORY/$TRANSLATION/chapters" | sort -n -k1 -k3 -k4 | while read -r NAME; do
-            echo "$TXT_DIRECTORY/$TRANSLATION/chapters/$NAME"
+        ls -p "$TXT_DIRECTORY/$TRANSLATION/books" | grep -v / | sort -n | while read -r BOOK; do
+            # E.g. 1 Genesis
+            BIBLE_BOOK_TITLE_WITH_INDEX=$( echo "$BOOK" | head -n1 | sed 's@^\([0-9]\+\s\+[^-]\+\)\s\+.*@\1@')
+            # Strip off the index
+            BIBLE_BOOK_TITLE=$( echo "$BIBLE_BOOK_TITLE_WITH_INDEX" | sed 's@^[0-9]\+\s\+@@' )
+            # E.g. 1, 10, 100
+            BIBLE_BOOK_CHAPTERS=$( cat "$TXT_DIRECTORY/$TRANSLATION/books/$BOOK" | cut -d ':' -f1 | tr -d '[' | uniq | grep -E '^[0-9]+$' )
+            # E.g. txt/YLT/chapters
+            BIBLE_BOOK_CHAPTER_DIR="$TXT_DIRECTORY/$TRANSLATION/chapters"
+            for c in $BIBLE_BOOK_CHAPTERS; do
+                echo "$BIBLE_BOOK_CHAPTER_DIR/$BIBLE_BOOK_TITLE $c.txt"
+            done
         done
     done )
 
