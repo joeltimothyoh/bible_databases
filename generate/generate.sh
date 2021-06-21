@@ -23,8 +23,7 @@ BOOKS_PATHS_ALL=$(
             echo "$TXT_DIRECTORY/$TRANSLATION/books/$NAME"
         done
     done )
-BOOKS=$( ls "$TXT_DIRECTORY/YLT" | sort -n | sed 's@^[0-9]\+\s\+\([^-]\+\)\s\+.*@\1@' )
-
+BOOKS=$( ls "$TXT_DIRECTORY/YLT/books" | sort -n | sed 's@^[0-9]\+\s\+\([^-]\+\)\s\+.*@\1@' )
 # Get chapters
 CHAPTERS_PATHS_ALL=$(
     for TRANSLATION in $TRANSLATIONS; do
@@ -51,7 +50,7 @@ MD_TABLE_CONTENT=$(
     echo "$BOOKS" | while read -r BOOK; do
         _LINE="| $BOOK "
         for TRANSLATION in $TRANSLATIONS; do
-            _LINE=$( echo "$_LINE | [read]($( echo "$BOOKS_PATHS_ALL" | grep -E "$TXT_DIRECTORY/$TRANSLATION/[0-9]+\s+$BOOK.*\($TRANSLATION\).txt" | sed 's/ /%20/g' ))" )
+            _LINE=$( echo "$_LINE | [read]($( echo "$BOOKS_PATHS_ALL" | grep -E "$TXT_DIRECTORY/$TRANSLATION/books/[0-9]+\s+$BOOK.*\($TRANSLATION\).txt" | sed 's/ /%20/g' ))" )
         done
         echo "$_LINE"
     done
